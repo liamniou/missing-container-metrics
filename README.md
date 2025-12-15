@@ -1,7 +1,7 @@
 # Missing Container Metrics - metrics cadvisor won't give you
 
-[![GitHub Release](https://img.shields.io/github/v/release/sliamniou/missing-container-metrics?sort=semver)][ghcr]
-[![Build Status](https://img.shields.io/github/actions/workflow/status/sliamniou/missing-container-metrics/docker-publish.yml?branch=master)][ghcr]
+[![GitHub Release](https://img.shields.io/github/v/release/liamniou/missing-container-metrics?sort=semver)][ghcr]
+[![Build Status](https://img.shields.io/github/actions/workflow/status/liamniou/missing-container-metrics/docker-publish.yml?branch=master)][ghcr]
 
 
 **STATUS: stable, maintained**
@@ -42,7 +42,7 @@ The easiest way of installing `missing-container-metrics` in your kubernetes clu
 ### Docker
 
 ```sh
-$ docker run -d -p 3001:3001 -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/sliamniou/missing-container-metrics:latest
+$ docker run -d -p 3001:3001 -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/liamniou/missing-container-metrics:latest
 ```
 
 ### Docker compose
@@ -52,7 +52,7 @@ version: '3.8'
 
 services:
   missing-container-metrics:
-    image: ghcr.io/sliamniou/missing-container-metrics:latest
+    image: ghcr.io/liamniou/missing-container-metrics:latest
     container_name: missing-container-metrics
     ports:
       - "3001:3001"
@@ -143,4 +143,4 @@ Contributions are welcome, send your issues and PRs to this repo.
 [MIT](LICENSE) - Copyright Dragan Milic and contributors
 
 
-[ghcr]: https://github.com/sliamniou/missing-container-metrics/pkgs/container/missing-container-metrics
+[ghcr]: https://github.com/liamniou/missing-container-metrics/pkgs/container/missing-container-metrics
