@@ -1,7 +1,7 @@
 # Missing Container Metrics - metrics cadvisor won't give you
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/dmilhdef/missing-container-metrics.svg?maxAge=604800)][hub]
-[![Docker Image Version](https://img.shields.io/docker/v/dmilhdef/missing-container-metrics?sort=semver)][hub]
+[![GitHub Release](https://img.shields.io/github/v/release/sliamniou/missing-container-metrics?sort=semver)][ghcr]
+[![Build Status](https://img.shields.io/github/actions/workflow/status/sliamniou/missing-container-metrics/docker-publish.yml?branch=master)][ghcr]
 
 
 **STATUS: stable, maintained**
@@ -25,6 +25,7 @@ not being forwarded because the Fluentd worker process kept being OOM-kill and
 then restarted by the main process. A fix was then deployed 10 minutes later.
 
 ## Supported Container Runtimes
+
 * Docker
 * Containerd
 
@@ -41,13 +42,46 @@ The easiest way of installing `missing-container-metrics` in your kubernetes clu
 ### Docker
 
 ```sh
-$ docker run -d -p 3001:3001 -v /var/run/docker.sock:/var/run/docker.sock dmilhdef/missing-container-metrics:v0.14.0
+$ docker run -d -p 3001:3001 -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/sliamniou/missing-container-metrics:latest
 ```
+
+### Docker compose
+
+```yaml
+version: '3.8'
+
+services:
+  missing-container-metrics:
+    image: ghcr.io/sliamniou/missing-container-metrics:latest
+    container_name: missing-container-metrics
+    ports:
+      - "3001:3001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+```
+
+### Environment variables
+
+| Variable                   | Description                                                                 | Default                         |
+|----------------------------|-----------------------------------------------------------------------------|---------------------------------|
+| `PORT`                     | The port on which the metrics server listens                                | `3001`                          |
+| `DOCKER_SOCKET_PATH`       | Path to the Docker socket file                                              | `/var/run/docker.sock`          |
+| `CONTAINERD_SOCKET_PATH`   | Path to the Containerd socket file                                          | `/run/containerd/containerd.sock` |
+| `CONTAINERD`               | Set to `true` to use Containerd runtime instead of Docker                   | `false`                         |
+| `LOG_LEVEL`                | Logging level (`info`, `debug`, `warn`, `error`)                           | `info`                          |
+| `METRICS_PATH`             | Path under which to expose metrics                                          | `/metrics`                      |
+| `KUBERNETES_MODE`          | Enable Kubernetes mode (set to `true` to enable)                            | `false`                         |
+| `POLL_INTERVAL_SECONDS`    | How often (in seconds) to poll container stats                              | `15`                            |
+
+Please refer to your deployment environment for possible additional variables.
+
 
 ## Usage
 
 Exposes metrics about Docker/Containerd containers.
 Every metric contains following labels:
+
 ## Exposed Metrics
 
 Each of those metrics, are published with the labels from the next section.
@@ -109,4 +143,4 @@ Contributions are welcome, send your issues and PRs to this repo.
 [MIT](LICENSE) - Copyright Dragan Milic and contributors
 
 
-[hub]: https://hub.docker.com/r/dmilhdef/missing-container-metrics/
+[ghcr]: https://github.com/sliamniou/missing-container-metrics/pkgs/container/missing-container-metrics
