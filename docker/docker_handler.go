@@ -5,20 +5,22 @@ import (
 	"strings"
 
 	"github.com/docker/docker/api/types"
+	containertypes "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
 
 func HandleDocker(ctx context.Context, slogger *zap.SugaredLogger) error {
-	dc, err := client.NewEnvClient()
+	dc, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		return errors.Wrap(err, "while creating docker client")
 	}
+	defer dc.Close()
 
 	evts, errs := dc.Events(ctx, types.EventsOptions{})
 
-	containers, err := dc.ContainerList(ctx, types.ContainerListOptions{
+	containers, err := dc.ContainerList(ctx, containertypes.ListOptions{
 		All: true,
 	})
 
