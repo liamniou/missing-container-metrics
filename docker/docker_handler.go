@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/docker/docker/api/types"
-	containertypes "github.com/docker/docker/api/types/container"
+	dockercontainer "github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/events"
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -16,11 +16,10 @@ func HandleDocker(ctx context.Context, slogger *zap.SugaredLogger) error {
 	if err != nil {
 		return errors.Wrap(err, "while creating docker client")
 	}
-	defer dc.Close()
 
-	evts, errs := dc.Events(ctx, types.EventsOptions{})
+	evts, errs := dc.Events(ctx, events.ListOptions{})
 
-	containers, err := dc.ContainerList(ctx, containertypes.ListOptions{
+	containers, err := dc.ContainerList(ctx, dockercontainer.ListOptions{
 		All: true,
 	})
 
