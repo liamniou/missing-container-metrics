@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/draganm/missing-container-metrics/containerd"
 	"github.com/draganm/missing-container-metrics/docker"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/urfave/cli/v2"
@@ -30,13 +29,6 @@ func main() {
 					"DOCKER",
 				},
 			},
-			&cli.BoolFlag{
-				Name:  "containerd",
-				Value: true,
-				EnvVars: []string{
-					"CONTAINERD",
-				},
-			},
 		},
 		Action: func(c *cli.Context) error {
 			logger, err := zap.NewProduction()
@@ -54,16 +46,6 @@ func main() {
 					err := docker.HandleDocker(ctx, slogger)
 					if err != nil {
 						slogger.With("error", err).Error("while handling docker")
-						cancel()
-					}
-				}()
-			}
-
-			if c.Bool("containerd") {
-				go func() {
-					err := containerd.HandleContainerd(ctx, slogger)
-					if err != nil {
-						slogger.With("error", err).Error("while handling containerd")
 						cancel()
 					}
 				}()
